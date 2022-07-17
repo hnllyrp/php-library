@@ -30,7 +30,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Hnllyrp\\PhpLibrary\\Tests\\": "tests/"
+            "Hnllyrp\\PhpSupport\\Tests\\": "tests/"
         }
     },
     "config": {

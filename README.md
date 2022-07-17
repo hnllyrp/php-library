@@ -1,2 +1,3 @@
 # php-support
-php common library support
+
+- 基于 php 原生通用提供扩展支持，不依赖其他第三方框架。主要版本7.2以上
