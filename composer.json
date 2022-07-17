@@ -1,0 +1,19 @@
+{
+    "name": "hnllyrp/php-support",
+    "description": "The php common library support",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Hnllyrp\\PhpSupport\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "hnllyrp",
+            "email": "hnllyrp@126.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {}
+}
