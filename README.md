@@ -1,3 +1,17 @@
 # php-support
 
-- 基于 php 原生通用提供扩展支持，不依赖其他第三方框架。主要版本7.2以上
+> php 工具类库。数组、字符串、文件处理、时间函数、图片、URL、XML、金额转换等。
+
+安装使用
+```
+composer require hnllyrp/php-support
+```
+
+- Arr 数组工具类
+- Convert
+- Crypt 加密解密类
+
+
+- Math 高精度计算类
+
+- Idcard 身份证工具类

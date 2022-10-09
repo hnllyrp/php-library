@@ -1,9 +1,10 @@
 {
     "name": "hnllyrp/php-support",
-    "description": "The php common library support",
+    "description": "The php common library support. Array、String、Time、Util",
     "keywords": [
         "php",
-        "library"
+        "library",
+        "Util"
     ],
     "type": "library",
     "license": "MIT",
@@ -17,12 +18,15 @@
         "php": "^7.2.5|^8.0",
         "ext-json": "*",
         "ext-mbstring": "*",
-        "ext-openssl": "*"
-    },
-    "require-dev": {
+        "ext-openssl": "*",
+        "ext-bcmath": "*",
+        "ext-curl": "*",
+        "ext-pdo": "*",
+        "ext-simplexml": "*"
     },
     "autoload": {
         "files": [
+            "src/helper.php"
         ],
         "psr-4": {
             "Hnllyrp\\PhpSupport\\": "src/"
