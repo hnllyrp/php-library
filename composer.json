@@ -22,7 +22,8 @@
         "ext-bcmath": "*",
         "ext-curl": "*",
         "ext-pdo": "*",
-        "ext-simplexml": "*"
+        "ext-simplexml": "*",
+        "ext-gd": "*"
     },
     "autoload": {
         "files": [
