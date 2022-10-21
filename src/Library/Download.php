@@ -6,7 +6,6 @@ namespace Hnllyrp\PhpSupport\Library;
  * 使用curl实现超大文件下载，并支持断点续载
  *
  * Class Download
- * @package Hnllyrp\PhpSupport\library
  */
 class Download
 {
