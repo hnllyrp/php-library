@@ -3,8 +3,67 @@
 namespace Hnllyrp\PhpSupport;
 
 
-class File
+class Filesystem
 {
+    /**
+     * 返回目录文件大小  单位 字节
+     * echo round(dirSize('/home/vagrant')/1024/1024).'MB';
+     * @param $dir
+     * @return int
+     */
+    public static function dirSize($dir): int
+    {
+        $size = 0;
+        foreach (glob($dir . '/*') as $file) {
+            $size += is_file($file) ? filesize($file) : self::dirSize($file);
+        }
+        return $size;
+    }
+
+    /**
+     * 删除目录
+     * @param $dir
+     * @return bool
+     */
+    public static function delDir($dir): bool
+    {
+        if (!is_dir($dir)) {
+            return true;
+        }
+        foreach (glob($dir . '/*') as $file) {
+            is_file($file) ? unlink($file) : self::delDir($file);
+        }
+        return rmdir($dir);
+    }
+
+    /**
+     * 复制目录
+     * @param $dir
+     * @param $to
+     * @return bool
+     */
+    public static function copyDir($dir, $to): bool
+    {
+        is_dir($to) or mkdir($to, 0755, true);
+        foreach (glob($dir . '/*') as $file) {
+            $target = $to . '/' . basename($file);
+            is_file($file) ? copy($file, $target) : self::copyDir($file, $target);
+        }
+        return true;
+    }
+
+    /**
+     * 移动目录
+     * @param $dir
+     * @param $to
+     * @return bool
+     */
+    public static function moveDir($dir, $to): bool
+    {
+        self::copyDir($dir, $to);
+        return self::delDir($dir);
+    }
+
     /**
      * 获取指定目录下所有的文件，包括子目录下的文件
      *
@@ -101,6 +160,7 @@ class File
 
         return false;
     }
+
 
     /**
      * 建立一个具有唯一文件名的文件
