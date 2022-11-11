@@ -10,7 +10,7 @@ class DB
     protected $link = null;
     protected $options = ['table' => '', 'field' => '', 'limit' => '', 'order' => '', 'where' => ''];
 
-    public function __construct($config)
+    public function __construct($config = [])
     {
         $this->connect($config);
     }
@@ -94,8 +94,10 @@ class DB
 
     public function update(array $vars)
     {
-        if (empty($this->options['where']))
+        if (empty($this->options['where'])) {
             throw new Exception('不能缺少条件');
+        }
+
         $sql = "UPDATE {$this->options['table']} SET " . implode('=?,', array_keys($vars)) . "=? {$this->options['where']}";
         return $this->execute($sql, array_values($vars));
     }
