@@ -289,10 +289,25 @@ class Filesystem
             return file_get_contents($filename);
         } else {
             $fp = fopen($filename, "rb");
-            $str = fread($fp, filesize($filename));
+            $content = fread($fp, filesize($filename));
             fclose($fp);
-            return $str;
+            return $content;
         }
+    }
+
+    /**
+     * 读取文件.
+     *
+     * @param $filename
+     * @return false|string
+     */
+    public function readFileContent($filename)
+    {
+        $fp = fopen($filename, 'r');
+        $content = fread($fp, filesize($filename));
+        fclose($fp);
+
+        return $content;
     }
 
     //将文件内容读出到一个数组中

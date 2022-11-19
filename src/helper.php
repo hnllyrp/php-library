@@ -90,7 +90,7 @@ function format_number(int $number = 0)
 function trimall($str)
 {
     if (is_array($str)) {
-        return array_map('trimall', $str);
+        return array_map(__FUNCTION__, $str);
     }
     $search = array(" ", "　", "\t", "\n", "\r");
     $replace = array("", "", "", "", "");
@@ -205,5 +205,65 @@ function log_info($content = '', $code = 'pay')
     fclose($fp);
 }
 
+if (!function_exists("stripslashesDeep")) {
+    /**
+     * 取消特殊字符转义
+     *
+     * @param mixed $data 字符串
+     *
+     * @return mixed
+     */
+    function stripslashesDeep($data)
+    {
+        if (is_array($data)) {
+            return array_map(__FUNCTION__, $data);
+        } else {
+            return stripslashes($data);
+        }
+    }
+}
 
+if (!function_exists("addslashesDeep")) {
+    /**
+     * 特殊字符转义
+     *
+     * @param mixed $data 字符串
+     *
+     * @return mixed
+     */
+    function addslashesDeep($data)
+    {
+        if (is_array($data)) {
+            return array_map(__FUNCTION__, $data);
+        } else {
+            return addslashes($data);
+        }
+    }
+}
 
+/**
+ * 调试输出
+ * @param ...$params
+ */
+function dump_(...$params)
+{
+    var_dump(...$params);
+    echo eol();
+}
+
+function dd_(...$params)
+{
+    var_dump(...$params);
+    echo eol();
+    die;
+}
+
+function pr_($params, $return = false)
+{
+    return print_r($params, $return);
+}
+
+function eol()
+{
+    return (php_sapi_name() === 'cli') ? PHP_EOL : '<br>';
+}

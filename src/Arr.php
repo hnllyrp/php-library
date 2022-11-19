@@ -118,6 +118,40 @@ class Arr
         return (object)$arr;
     }
 
+
+    /**
+     * 二维数组查找值
+     *
+     * @param $key
+     * @param $value
+     * @param $array
+     *
+     * @return mixed
+     */
+    public function array_search_filter($key, $value, $array)
+    {
+        $array = array_filter($array, function ($item) use ($key, $value) {
+            return $item[$key] === $value;
+        });
+
+        return reset($array);
+    }
+
+    /**
+     * 数组查找 index.
+     *
+     * @param $node
+     * @param $array
+     *
+     * @return bool|mixed
+     */
+    public function array_search_index($node, $array)
+    {
+        $flip_array = array_flip($array);
+
+        return isset($flip_array[$node]) ? $flip_array[$node] : false;
+    }
+
     /**
      * 递归显示所有分类
      * @param int $cat_id
