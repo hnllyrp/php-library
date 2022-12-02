@@ -2,6 +2,8 @@
 
 namespace Hnllyrp\PhpSupport;
 
+use DateTimeImmutable;
+
 /**
  * Class Time
  */
@@ -40,9 +42,72 @@ class Time
         $time = explode(" ", microtime());
         $time = $time[1] . ($time[0] * 1000);
         $time2 = explode(".", $time);
-        $time = $time2[0];
+        return $time2[0];
+    }
 
-        return $time;
+    /**
+     * from web
+     */
+    public static function milli_second_str()
+    {
+        list($msec, $sec) = explode(' ', microtime());
+        $msectime = (float)sprintf('%.0f', (floatval($msec) + floatval($sec)) * 1000);
+        return substr($msectime, 0, 13);
+    }
+
+    /**
+     * from web
+     */
+    public static function milli_second2()
+    {
+        return number_format(microtime(true), 3, '', '');
+    }
+
+    /**
+     * 同 Carbon::now()->valueOf()
+     * from nesbot/carbon
+     */
+    public static function getTimestampMs($precision = 3)
+    {
+        $date = new DateTimeImmutable();
+        return (int)round(((float)$date->format('Uu')) / pow(10, 6 - $precision));
+    }
+
+    /**
+     * from getui
+     */
+    public static function milli_second_time()
+    {
+        list($usec, $sec) = explode(" ", microtime());
+        return ($sec . substr($usec, 2, 3));
+    }
+
+    /**
+     * from ramsey/uuid
+     */
+    public static function milli_second_timestamp()
+    {
+        $time = explode(' ', microtime(false));
+
+        return $time[1] . substr($time[0], 2, 5);
+    }
+
+    /**
+     * from symfony/polyfill-php73
+     */
+    public static function hrtime($asNum = false)
+    {
+        $ns = microtime(false);
+        $s = substr($ns, 11) - (int)microtime(true);
+        $ns = 1E9 * (float)$ns;
+
+        if ($asNum) {
+            $ns += $s * 1E9;
+
+            return \PHP_INT_SIZE === 4 ? $ns : (int)$ns;
+        }
+
+        return [$s, (int)$ns];
     }
 
     /**
@@ -266,4 +331,58 @@ class Time
 
         return $continue_day;    //输出连续几天
     }
+
+    /**
+     * 已知月份日期获取星座
+     * @param int $month
+     * @param int $day
+     * @return string
+     */
+    function constellation(int $month = 1, int $day = 1)
+    {
+        if ($month < 1 || $month > 12 || $day < 1 || $day > 31) {
+            return '';
+        }
+        //参数为 number 类型
+        $constellation_arr = ["魔羯座", "水瓶座", "双鱼座", "白羊座", "金牛座", "双子座", "巨蟹座", "狮子座", "处女座", "天秤座", "天蝎座", "射手座", "魔羯座"];
+        $constellation_edge_day = [20, 19, 21, 20, 21, 22, 23, 23, 23, 24, 23, 22];
+
+        return $day < $constellation_edge_day[$month] ? $constellation_arr[$month - 1] : $constellation_arr[$month];
+    }
+
+    function get_constellation(int $month = 1, int $day = 1)
+    {
+        //判断的时候,为避免出现1和true的疑惑,或是判断语句始终为真的问题,这里统一处理成字符串形式
+        $str_month = strval($month);
+
+        $constellation_name = [
+            '水瓶座', '双鱼座', '白羊座', '金牛座', '双子座', '巨蟹座',
+            '狮子座', '处女座', '天秤座', '天蝎座', '射手座', '摩羯座'
+        ];
+
+        if ($day <= 22) {
+            if ('1' !== $str_month) {
+                $constellation = $constellation_name[$month - 2];
+            } else {
+                $constellation = $constellation_name[11];
+            }
+        } else {
+            $constellation = $constellation_name[$month - 1];
+        }
+
+        return $constellation;
+    }
+
+    /**
+     * 通过年份获取生肖
+     *
+     * @param int $year
+     * @return string
+     */
+    function chinese_zodiac($year = 1988)
+    {
+        $animal = ['子鼠', '丑牛', '寅虎', '卯兔', '辰龙', '巳蛇', '午马', '未羊', '申猴', '酉鸡', '戌狗', '亥猪'];
+        return $animal[($year - 1900) % 12];
+    }
+
 }
