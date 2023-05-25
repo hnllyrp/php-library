@@ -188,6 +188,36 @@ if (!function_exists("isMobile")) {
     }
 }
 
+if (!function_exists('is_wechat_browser')) {
+    /**
+     * 访问环境检查，是否是微信
+     * @return bool
+     */
+    function is_wechat_browser()
+    {
+        $use_agent = $_SERVER['HTTP_USER_AGENT'] ?? '';
+        if (preg_match('~micromessenger~i', strtolower($use_agent))) {
+            return true;
+        }
+        return false;
+    }
+}
+
+if (!function_exists('is_alipay')) {
+    /**
+     * 访问环境检查，是否是支付宝
+     * @return bool
+     */
+    function is_alipay()
+    {
+        $user_agent = $_SERVER['HTTP_USER_AGENT'] ?? '';
+        if (preg_match('~alipay~i', strtolower($user_agent))) {
+            return true;
+        }
+        return false;
+    }
+}
+
 if (!function_exists("is_ssl")) {
     /**
      * 判断是否SSL协议  https://

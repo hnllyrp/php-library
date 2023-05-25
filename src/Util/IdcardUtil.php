@@ -1,9 +1,9 @@
 <?php
 
-namespace Hnllyrp\PhpSupport;
+namespace Hnllyrp\PhpSupport\Util;
 
 
-class Idcard
+class IdcardUtil
 {
     /**
      * 验证身份证号是否正确的函数

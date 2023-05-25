@@ -187,6 +187,61 @@ class Arr
         return $list;
     }
 
+
+    /**
+     * 无限级分类 - 返回子分类
+     * @param array $data
+     * @param int $pid
+     * @return array
+     */
+    public static function getTreeChild($data = [], $pid = 0)
+    {
+        $tree = [];
+        foreach ($data as $k => $v) {
+            if ($v['pid'] == $pid) {
+                unset($data[$k]);
+                if (!empty($data)) {
+                    $children = self::getTreeChild($data, $v['id']);
+                    if (!empty($children)) {
+                        $v['child'] = $children;
+                    }
+                }
+                $tree[] = $v;
+            }
+        }
+
+        return $tree;
+    }
+
+    /**
+     * 无限级分类 - 递归处理
+     *
+     * @param array $arr
+     * @param int $pid
+     * @param int $level
+     * @return array
+     */
+    public static function getTree($arr = [], $pid = 0, $level = 0)
+    {
+        //声明静态数组,避免递归调用时,多次声明导致数组覆盖
+        static $list = [];
+        foreach ($arr as $key => $value) {
+            //第一次遍历,找到父节点为根节点的节点 也就是parent_id=0的节点
+            if ($value['pid'] == $pid) {
+                //父节点为根节点的节点,级别为0，也就是第一级
+                $value['level'] = $level;
+                //把数组放到list中
+                $list[] = $value;
+                //把这个节点从数组中移除,减少后续递归消耗
+                unset($arr[$key]);
+                //开始递归,查找父ID为该节点ID的节点,级别则为原级别+1
+                self::getTree($arr, $value['id'], $level + 1);
+            }
+        }
+
+        return $list;
+    }
+
     /**
      * 对两个二维数组取差集 - 去除$arr1 中 存在和$arr2相同的部分之后的内容
      * @param array $arr1

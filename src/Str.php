@@ -264,22 +264,23 @@ class Str
     /**
      * 将字符串以 * 号格式显示 配合 self::msubstr 函数使用
      * string_to_star($str,1)  w******f , string_to_star($str,2) we****af
-     * @param string $string 至少9个字符长度
+     * @param string $string 至少9个字符长度才截取
+     * @param int $show_num 前后各保留几个字符
      * @return string
      */
-    public static function string_to_star($string = '', $num = 3)
+    public static function string_to_star($string = '', $show_num = 3)
     {
-        if (strlen($string) > 9 && strlen($string) > $num) {
-            $lenth = strlen($string) - $num * 2;
-            for ($x = 1; $x <= $lenth; $x++) {
+        $strlen = strlen($string);
+        if ($strlen > 9 && $strlen > $show_num) {
+            $star_length = '';
+            $length = $strlen - $show_num * 2;
+            for ($x = 1; $x <= $length; $x++) {
                 $star_length .= "*";
             }
-            $result = self::msubstr($string, 0, $num, 'utf-8', $star_length);
-        } else {
-            $result = $string;
+            return self::msubstr($string, 0, $show_num, 'utf-8', $star_length);
         }
 
-        return $result;
+        return $string;
     }
 
     /**
@@ -359,6 +360,38 @@ class Str
         return strtolower($url);
     }
 
+
+    /**
+     * 将URL中的某参数设为某值
+     * @param string $url index.php?m=goods&id=530&u=1111
+     * @param string $key key=330 ,u=1
+     * @param string $value 要替换后的值
+     * @return string
+     */
+    public static function replace_url_query_value($url = '', $key = '', $value = '')
+    {
+        list($url_prefix, $query) = explode('?', $url);
+        parse_str($query, $result);
+        $result[$key] = $value;
+        return $url_prefix . '?' . http_build_query($result);
+    }
+
+    /**
+     * 移除url参数后缀 即?开头的
+     * @param string $url
+     * @param string $derp 默认 ?
+     * @return mixed|string
+     */
+    public static function replace_url_query($url = '', $derp = '?')
+    {
+        if (false == strpos($url, $derp)) {
+            return $url;
+        }
+
+        list($url_prefix, $query) = explode($derp, $url);
+        return $url_prefix;
+    }
+
     /**
      * 处理url
      * @param $parsed_url
@@ -383,7 +416,7 @@ class Str
      * 解析XML格式的字符串
      *
      * @param string $str
-     * @return 解析正确就返回解析结果,否则返回false,说明字符串不是XML格式
+     * @return false 解析正确就返回解析结果,否则返回false,说明字符串不是XML格式
      */
     public static function xml_parser($str)
     {
@@ -394,23 +427,6 @@ class Str
         } else {
             return (json_decode(json_encode(simplexml_load_string($str)), true));
         }
-    }
-
-    /**
-     * 将URL中的某参数设为某值
-     * @param  $url   index.php?m=goods&id=530&u=1111
-     * @param  $key   key=330 ,u=1
-     * @param  $value 要替换后的值
-     * @return string
-     */
-    public static function url_set_value($url, $key, $value)
-    {
-        $a = explode('?', $url);
-        $url_f = $a[0];
-        $query = $a[1];
-        parse_str($query, $arr);
-        $arr[$key] = $value;
-        return $url_f . '?' . http_build_query($arr);
     }
 
     /**
@@ -785,7 +801,7 @@ class Str
     }
 
     /**
-     * 过滤特殊字符 微信昵称等
+     * 过滤特殊字符 使用场景：如微信昵称等
      * @param string $str
      * @return mixed|string
      */
@@ -807,6 +823,6 @@ class Str
             '/[[:punct:]]/i', // 标点符号 英文状态下  !@#$%^&* ().,<>|[]'\":;}{-_+=?/~`
             '/\（/', '/\）/', '/\？/', '/\：/', '/\；/', '/\！/', '/\“/', '/\’/', '/\，/', '/\。/', // 标点符号 中文状态下（）？ ：；！ ” ‘ ，。
         ];
-        return preg_replace($patterns, ' ', $str);
+        return preg_replace($patterns, '', $str);
     }
 }
